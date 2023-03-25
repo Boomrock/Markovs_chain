@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markovs_chain", "Markovs_chain\Markovs_chain.csproj", "{53577238-7435-4610-BF01-F6FE3BD1AF9E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53577238-7435-4610-BF01-F6FE3BD1AF9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53577238-7435-4610-BF01-F6FE3BD1AF9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53577238-7435-4610-BF01-F6FE3BD1AF9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53577238-7435-4610-BF01-F6FE3BD1AF9E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2228EADC-F44E-48B5-8A4C-6344429EF0AE}
+	EndGlobalSection
+EndGlobal
