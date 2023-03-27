@@ -8,10 +8,10 @@ namespace Markovs_chain
     {
         static void Main(string[] args)
         {
-            int sizex = 5;
-            int sizey = 10;
+            int sizex = 3;
+            int sizey = 3;
             string[] first = new string[] { "C", "d" };
-            string[] second = new string[] { "c" };
+            string[] second = new string[] { "t" };
             char[,] mapch = new char[sizey, sizex];
             float[,] map = new float[sizey, sizex];
             float[,] avr = new float[sizey, sizex];
@@ -28,15 +28,10 @@ namespace Markovs_chain
                 }
             }
             map[0, 0] = 0;
-            map = generateSector(map);
-            map = softArray(map);
-            map = generateSector(map);
+            map = generateSector(map, 100);
+            map = generateSector(map, 10);
 
-            map = generateSector(map);
-            map = softArray(map);
-            map = softArray(map);
 
-            RoundArray(map);
 
             for (int z = 0; z < map.GetLength(0); z++)
             {
@@ -54,7 +49,7 @@ namespace Markovs_chain
                 for (int z = 0; z < mapch.GetLength(1); z++)
                 {
                     mapch[i, z] = ' ';
-                    if (map[i, z] == max)
+                    if (map[i, z] >= max - max / 30)
                     {
                         mapch[i, z] = first[0][0];
                     }
@@ -81,20 +76,23 @@ namespace Markovs_chain
                 }
             }
             printarray(map);
-            map = generateSector(map);
-            map = generateSector(map);
-            map = generateSector(map);
-            map = softArray(map);
-            map = softArray(map);
-            RoundArray(map);
+            map = generateSector(map, 20);
+            softArray(map);
+            softArray(map);
+            softArray(map);
+            softArray(map);
+            softArray(map);
+            Filter(mapch, map,'C');
+
             printarray(map);
             max = Max(map);
+            int countChair = 2;
             for (int i = 0; i < mapch.GetLength(0); i++)
             {
                 for (int z = 0; z < mapch.GetLength(1); z++)
                 {
 
-                    if (map[i, z] >= max)
+                    if (map[i, z] >= (max - max / (2 * countChair)))
                     {
                         mapch[i, z] = second[0][0];
                     }
@@ -210,6 +208,21 @@ namespace Markovs_chain
              */
         }
 
+        private static void Filter(char[,] mapch, float[,] map, char ch)
+        {
+
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int z = 0; z < map.GetLength(1); z++)
+                {
+                    if (mapch[i, z] == ch)
+                    {
+                        map[i, z] = 0;
+                    }
+                }
+            }
+        }
+
         private static void RoundArray(float[,] map)
         {
             for (int i = 0; i < map.GetLength(0); i++)
@@ -228,7 +241,7 @@ namespace Markovs_chain
             {
                 for (int s = -1; s <= 1; s++)
                 {
-                    if (y+a >= 0 && y+a< map.GetLength(0) && x + s >= 0 && x + s < map.GetLength(1) && a != 0 && s!=0)
+                    if (y+a >= 0 && y+a< map.GetLength(0) && x + s >= 0 && x + s < map.GetLength(1) &&( a != 0 || s!=0))
                     {
                         if (map[a + y, x + s] == ch)
                             return true;
@@ -291,7 +304,7 @@ namespace Markovs_chain
             }
 
         }
-        static float[,] generateSector(float[,] map)
+        static float[,] generateSector(float[,] map, int countStep)
         {
 
             float sum = 0;
@@ -314,7 +327,7 @@ namespace Markovs_chain
             Link markivsChain = new Link(
                 p.ToArray()
             );
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < countStep; i++)
             {
 
                 var current = markivsChain.NextElement();
@@ -345,7 +358,7 @@ namespace Markovs_chain
                 {
 
                     sum = 0;
-                    int count = 0;
+
                     gradient[i, z] = 0;
                     for (int r = -1; r <= 1; r++)
                     {
@@ -354,48 +367,17 @@ namespace Markovs_chain
 
                             if ((r + i) >= 0 && (r + i) < map.GetLength(0) && u + z >= 0 && u + z < map.GetLength(1))
                             {
-                                if (map[i+r, z+u] != 0) 
-                                {
-                                    count++;
-                                    sum += (map[r + i, u + z]);
-                                }
+
+
+                                sum += (map[r + i, u + z])/9;
+                                
                              
                             }
 
                         }
                     }
-                    if(count !=0)
-                        gradient[i, z] = (sum / count);
+                     gradient[i, z] = sum;
                 }
-            }
-            sum = 0;
-            for (int i = 0; i < gradient.GetLength(0); i++)
-            {
-                for (int z = 0; z < gradient.GetLength(1); z++)
-                {
-                    sum += gradient[i, z];
-                }
-            }
-            List<float>  p = new List<float>();
-            for (int i = 0; i < gradient.GetLength(0); i++)
-            {
-
-                for (int z = 0; z < gradient.GetLength(1); z++)
-                {
-
-                    p.Add(gradient[i, z] / sum);
-                }
-            }
-
-            Link markivsChain = new Link(
-                p.ToArray()
-            );
-            for (int i = 0; i < 10; i++)
-            {
-
-                var current = markivsChain.NextElement();
-                gradient[current/ gradient.GetLength(1), current % gradient.GetLength(1)] += 1;
-
             }
             return gradient;
         }
